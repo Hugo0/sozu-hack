@@ -15,6 +15,8 @@ Master-Slave Gnosis SAFE architecture
     - add sendState() fn on master safe
     - add readState() verification on slave safe
     - tests
+- [ ] Axelar / LayerZero / whtv
+    - [ ] make sure we can verify message comes from master safe
 - [ ] frontend
   - [ ] Simple react app
   - [ ] 
@@ -23,3 +25,12 @@ Master-Slave Gnosis SAFE architecture
   - add zkme as requirement
   - deploy on Mantle
   - ~api3?~
+
+### Architecture
+Polygon Mumbai <> Optimism Goerli (pretend mantle is optimism)
+
+
+---
+1. look at bridges: Kai - hyperlane, hugo axelar
+2. choose bridge
+3. 
