@@ -34,3 +34,33 @@ Polygon Mumbai <> Optimism Goerli (pretend mantle is optimism)
 1. look at bridges: Kai - hyperlane, hugo axelar
 2. choose bridge
 3. 
+
+
+----
+
+## Idea 2
+crosschain data transfer registry mumbo jumbo smth
+
+### Architecture decisions
+- 2 testnet chains that are not mantle
+- we do NOT refresh data on each dst contract read (assumption data doesn't have to be fresh)
+
+### Tasks to do
+- [ ] src chain registry contract - Kai
+- [ ] dst chain receiver registry contract - Kai / Hugo
+- [ ] figure out crosschain calls - Hugo
+- [ ] (opt) bitmap for gas efficiency - maybe Hugo
+- [ ] (opt) permissionless property adding - maybe Kai
+- [ ] demo js script - Hugo
+- [ ] logistics: video, presentation, devfolio submission - together
+
+
+
+
+
+
+
+
+
+
+
