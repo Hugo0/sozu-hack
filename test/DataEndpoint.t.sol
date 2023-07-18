@@ -25,4 +25,13 @@ contract DataEndpointTest is Test {
     //     uint256 balance = abi.decode(result, (uint256));
     //     assertEq(balance, 31); // the address hold 31 BAYC tokens at block 17_714_587
     // }
+
+    // DataEndpoint dataEndpoint;
+
+    function testConstructData() external {
+        bytes memory functionSignature = abi.encodeWithSignature("balanceOf(address)", 0x5777372A6BbBB0b0903aA5325094F390803f80D6);
+        console.logBytes(functionSignature);
+        address contractAddress = 0x07865c6E87B9F70255377e024ace6630C1Eaa37F; // USDC contract address
+        console.logBytes32(bytes32(uint256(uint160(0xfe5CD4EB9748C62B6B3edd36FA6c033c95D2f685))));
+    }
 }
