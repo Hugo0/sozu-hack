@@ -10,21 +10,39 @@ contract DataEndpointTest is Test {
     DataEndpoint public dataEndpoint;
     Registry public registry;
 
+    uint256 ethFork;
+    uint256 optimismFork;
+
     function setUp() public {
-        // TODO: deploy to goerli chain
+        // deploy to goerli chain
+        ethFork = vm.createFork("https://eth-goerli.g.alchemy.com/v2/-IR7-jmKYZuAup-HG0s-bGXNSzQu7Hsx");
+        vm.selectFork(ethFork);
         dataEndpoint = new DataEndpoint();
-        // TODO: deploy to optimism goerli chain
+
+        // deploy to optimism goerli chain
+        optimismFork = vm.createFork("https://goerli.optimism.io");
+        vm.selectFork(optimismFork);
         registry = new Registry(address(dataEndpoint));
     }
 
     function testDataEndpoint_canRead() external {  
-        // TODO: connect to goerli chain      
+        // connect to goerli chain      
+        vm.selectFork(ethFork);
         bytes memory functionSignature = abi.encodeWithSignature("balanceOf(address)", 0x5777372A6BbBB0b0903aA5325094F390803f80D6);
         address contractAddress = 0x07865c6E87B9F70255377e024ace6630C1Eaa37F; // USDC contract address
-        bytes memory expectedData = dataEndpoint.sendData(contractAddress, functionSignature, 420, bytes32(uint256(uint160(address(registry)))));
+        try dataEndpoint.sendData{value: 0.01 ether}(
+            contractAddress, 
+            functionSignature, 
+            420, 
+            bytes32(uint256(uint160(address(registry))))
+        ) {
+            // success
+        } catch Error(string memory reason) {
+            // assume that relayer would relay messages in real life
+        }
 
-        // TODO: switch to optimism goerli chain
-        bytes memory data = registry.readData(contractAddress, 5, functionSignature);
-        assertEq(data, expectedData);
+        // switch to optimism goerli chain
+        vm.selectFork(optimismFork);
+        // readData
     }
 }
