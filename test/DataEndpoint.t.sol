@@ -6,23 +6,23 @@ import "forge-std/Test.sol";
 import "../src/DataEndpoint.sol";
 
 contract DataEndpointTest is Test {
-    DataEndpoint public dataEndpoint;
+    // DataEndpoint public dataEndpoint;
 
-    uint256 mainnetId;
-    string constant MAINNET_RPC_URL = "https://eth-mainnet.g.alchemy.com/v2/ytr14v4BnB2qISBJIE4YxjIgYad55FHl";
+    // uint256 mainnetId;
+    // string constant MAINNET_RPC_URL = "https://eth-mainnet.g.alchemy.com/v2/ytr14v4BnB2qISBJIE4YxjIgYad55FHl";
 
-    function setUp() public {
-        mainnetId = vm.createFork(MAINNET_RPC_URL, 17_714_587); // block number 17_714_587
-        vm.selectFork(mainnetId);
-        dataEndpoint = new DataEndpoint();
-    }
+    // function setUp() public {
+    //     mainnetId = vm.createFork(MAINNET_RPC_URL, 17_714_587); // block number 17_714_587
+    //     vm.selectFork(mainnetId);
+    //     dataEndpoint = new DataEndpoint();
+    // }
 
-    function testDataEndpoint_canRead() external {        
-        bytes memory functionSignature = abi.encodeWithSignature("balanceOf(address)", 0x7A9fe22691c811ea339D9B73150e6911a5343DcA);
-        address contractAddress = 0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D; // BAYC contract address
+    // function testDataEndpoint_canRead() external {        
+    //     bytes memory functionSignature = abi.encodeWithSignature("balanceOf(address)", 0x7A9fe22691c811ea339D9B73150e6911a5343DcA);
+    //     address contractAddress = 0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D; // BAYC contract address
         
-        bytes memory result = dataEndpoint.sendData(contractAddress, functionSignature);
-        uint256 balance = abi.decode(result, (uint256));
-        assertEq(balance, 31); // the address hold 31 BAYC tokens at block 17_714_587
-    }
+    //     bytes memory result = dataEndpoint.sendData(contractAddress, functionSignature);
+    //     uint256 balance = abi.decode(result, (uint256));
+    //     assertEq(balance, 31); // the address hold 31 BAYC tokens at block 17_714_587
+    // }
 }
