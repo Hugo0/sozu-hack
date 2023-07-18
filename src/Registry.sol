@@ -5,14 +5,10 @@ import "./interfaces/IMailbox.sol";
 
 contract Registry {
 
-    IMailbox inbox;
+    IMailbox inbox = IMailbox(0xCC737a94FecaeC165AbCf12dED095BB13F037685);
     mapping(address => mapping(bytes => bytes)) private data;
 
     event ReceivedMessage(uint32 origin, bytes32 sender, bytes message);
-
-    constructor(address _inbox) {
-        inbox = IMailbox(_inbox);
-    }
 
     function handle(
         uint32 origin,
