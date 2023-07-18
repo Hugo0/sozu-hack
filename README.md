@@ -18,5 +18,13 @@ Deployed at: https://bafybeifpfxcg35wcmmjoye6esorfykbqks4n6qvzvpjefelcuewggttqrq
 - [ ] (opt) permissionless property adding - maybe Kai - 
 - [ ] demo js script - Hugo - WONTDO (we do website instead)
 - [ ] webpage - Hugo
+    - [x] mvp
+    - [x] send over data
+    - [ ] read dst data
+    - [ ] add custom calls
+    - [ ] read custom calls
+    - [ ] mantle hardcoding
+    - [ ] default calls: zkMe
+    - [ ] default calls: kyc
 - [ ] webpage on IPFS - Hugo
 - [ ] logistics: video, presentation, devfolio submission - together
