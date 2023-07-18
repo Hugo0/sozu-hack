@@ -1,39 +1,19 @@
 # sozu-hack
 repo for sozu house hackathon
 
+<<<<<<< HEAD
 Deployed Addresses: 
 - [Goerli](https://goerli.etherscan.io/address/0x9fa4cfab777274aedbd7a5c39b733c3e4534844f)
 - [Optimism Goerli](https://goerli-optimism.etherscan.io/address/0xfe5CD4EB9748C62B6B3edd36FA6c033c95D2f685)
 
+=======
+## Play with it
+>>>>>>> 5460339 (frontend mvp)
 
----
-## Idea 1
-Master-Slave Gnosis SAFE architecture
-1 master gnosis safe and n child safes. Child safe reads from master safe and only performs actions if data is synchronized from master safe
-
-**BRIDGE DOESN'T WORK**
---> we just pretend it works and pretend we are the bridge
-
-### Tasks
-- [ ] Extend Gnosis SAFE 1.3.0
-    - add sendState() fn on master safe
-    - add readState() verification on slave safe
-    - tests
-- [ ] Axelar / LayerZero / whtv
-    - [ ] make sure we can verify message comes from master safe
-- [ ] frontend
-  - [ ] Simple react app
-  - [ ] 
-- [ ] bounty hunt:
-  - add kyc as requirement
-  - add zkme as requirement
-  - deploy on Mantle
-  - ~api3?~
-
-### Architecture
-Polygon Mumbai <> Optimism Goerli (pretend mantle is optimism)
+Deployed at: https://bafybeifpfxcg35wcmmjoye6esorfykbqks4n6qvzvpjefelcuewggttqrq.ipfs.nftstorage.link/
 
 
+<<<<<<< HEAD
 ---
 1. look at bridges: Kai - hyperlane, hugo axelar
 2. choose bridge
@@ -68,3 +48,15 @@ crosschain data transfer registry mumbo jumbo smth
 
 
 
+=======
+## TODO:
+- [x] src chain registry contract - Kai
+- [x] dst chain receiver registry contract - Kai / Hugo
+- [ ] figure out crosschain calls - Hugo
+- [ ] (opt) bitmap for gas efficiency - maybe Hugo - WONTDO (not necessary)
+- [ ] (opt) permissionless property adding - maybe Kai - 
+- [ ] demo js script - Hugo - WONTDO (we do website instead)
+- [ ] webpage - Hugo
+- [ ] webpage on IPFS - Hugo
+- [ ] logistics: video, presentation, devfolio submission - together
+>>>>>>> 5460339 (frontend mvp)

@@ -1,0 +1,244 @@
+<head>
+    <title>Sozu Haus Data Transport</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js" integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .loader {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            background-color: rgba(0,0,0,0.8);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999;
+          }
+          
+          .loader div {
+            width: 40px;
+            height: 40px;
+            background-color: #f3f3f3;
+            border: 1px solid #fff;
+            position: relative;
+            animation: loader 1.2s infinite linear;
+          }
+          
+          .loader div::before,
+          .loader div::after {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 100%;
+            height: 100%;
+            background-color: #f3f3f3;
+            border: 1px solid #fff;
+            transform: rotateZ(45deg);
+            animation: loader 1.2s infinite linear;
+          }
+          
+          .loader div:nth-child(2) {
+            animation-delay: 0.2s;
+          }
+          
+          .loader div:nth-child(3) {
+            animation-delay: 0.4s;
+          }
+          
+          .loader div:nth-child(4) {
+            animation-delay: 0.6s;
+          }
+          
+          @keyframes loader {
+            0% {
+              transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+            } 
+            50% {
+              transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+            } 
+            100% {
+              transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+            }
+          }
+          
+    </style>
+</head>
+
+<body class="bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
+    <div class="container mx-auto px-4 py-5">
+
+        <div class="flex justify-center pt-8">
+
+        <button id="connect" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            CONNECT
+        </button>
+        </div>
+        <div class="flex justify-center pt-4 pb-8">
+
+            <button id="transport" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                TRANSPORT DATA
+            </button>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white rounded overflow-hidden shadow-lg p-6">
+                <h2 class="font-bold text-xl mb-2">SOURCE CHAIN</h2>
+                <p><span class="font-bold">Eth Balance: </span><span id="ethBalance">0</span></p>
+                <p><span class="font-bold">Transaction Count: </span><span id="transactionCount">0</span></p>
+                <p id="walletinfo" class="hidden"></p>
+                <div class="bg-white rounded overflow-hidden border-black border-2 p-4 mb-4 mt-8">
+                    <div class="flex items-center justify-between cursor-pointer" onclick="toggleForm()">
+                        <h2 class="font-bold text-md mb-2">ADD CUSTOM DATA</h2>
+                        <span id="toggleIcon" class="fas fa-chevron-down"></span>
+                        
+                    </div>
+                    <div id="formContainer" class="hidden">
+                        <p class="text-gray-700 text-base py-3">
+                            Add your custom contract data to be transported to the destination chain.
+                        </p>
+                        <form>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="contractAddress">Contract Address</label>
+                                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="contractAddress" type="text" placeholder="Enter contract address">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="functionSelector">Function Selector</label>
+                                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="functionSelector" type="text" placeholder="Enter function selector">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="callData">Call Data</label>
+                                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="callData" type="text" placeholder="Enter call data">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                
+            </div>
+            <div class="bg-white rounded overflow-hidden shadow-lg p-6">
+                <h2 class="font-bold text-xl mb-2">Transported Data</h2>
+
+                <p><span class="font-bold">Eth Balance: </span><span id="ethBalanceTransported">0</span></p>
+                <p><span class="font-bold">Transaction Count: </span><span id="transactionCountTransported">0</span></p>
+                <p class="text-gray-700 text-base py-3" id="transportedDataDescriptor">
+                    Your data will be transported here.
+                </p>
+            </div>
+        </div>
+        <!-- <div class="flex justify-center py-8">
+            <h1 class="font-bold text-5xl text-white">SOZU HAUS</h1>
+            <br>
+        </div> -->
+        <div class="flex justify-center py-8">
+
+            <div class="relative w-48 h-48">
+                <img class="rounded-full border border-gray-100 shadow-sm"
+                    src="https://pbs.twimg.com/profile_images/1584982357421031426/J_OpXjsx_400x400.jpg"
+                    alt="user image" />
+            </div>
+        </div>
+
+        <div class="fixed bottom-4 right-4 flex gap-4">
+            <a href="https://github.com/hugo0/sozu-hack" target="_blank" class="bg-gray-800 text-white w-10 h-10 flex justify-center items-center rounded-full" aria-label="Github link">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="https://twitter.com/sozuhaus" target="_blank" class="bg-blue-500 text-white w-10 h-10 flex justify-center items-center rounded-full" aria-label="Twitter link">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </div>
+        <div class="loader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+        
+    </div>
+    <!-- <script>
+        const axios = require('axios')
+
+        // Wallet address
+        const address = 'elanhalpern.eth'
+
+        // Alchemy URL
+        const baseURL = `https://eth-goerli.g.alchemy.com/v2/DFAY_eQ0hxon_stElS4hJoxSyn0sLH4n`;
+        const url = `${baseURL}/getNFTs/?owner=${address}`;
+
+        const config = {
+            method: 'get',
+            url: url,
+        };
+
+        // Make the request and print the formatted response:
+        axios(config)
+            .then(response => console.log(response['data']))
+            .catch(error => console.log('error', error));
+            
+    </script> -->
+    <script>
+        
+        function toggleForm() {
+            const formContainer = document.getElementById('formContainer');
+            const toggleIcon = document.getElementById('toggleIcon');
+            if (formContainer.style.display === "none" || formContainer.className === "hidden") {
+                formContainer.style.display = "block";
+                formContainer.className = "";
+                toggleIcon.className = "fas fa-chevron-up";
+            } else {
+                formContainer.style.display = "none";
+                formContainer.className = "hidden";
+                toggleIcon.className = "fas fa-chevron-down";
+            }
+        }
+        
+        document.getElementById('transport').addEventListener('click', () => {
+
+            // Show the loader
+            document.querySelector('.loader').style.display = 'flex';
+
+            // after 3 seconds hide loader and show transported data
+            setTimeout(() => {
+                document.querySelector('.loader').style.display = 'none';
+
+                // fill out balances
+                const ethBalance = document.getElementById('ethBalance').textContent;
+                const transactionCount= document.getElementById('transactionCount').textContent;
+
+                document.getElementById('ethBalanceTransported').textContent = ethBalance;
+                document.getElementById('transactionCountTransported').textContent = transactionCount;
+                document.getElementById('transportedDataDescriptor').textContent = 'Your data has been transported!';
+            }, 1000);
+        });
+
+        document.getElementById('connect').addEventListener('click', async () => {
+            if (!window.ethereum) {
+                alert('MetaMask is not installed!');
+                return;
+            }
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            provider = new ethers.providers.Web3Provider(window.ethereum); // if ethers v5
+            //provider = new ethers.BrowserProvider(window.ethereum); // 
+            wallet = await provider.getSigner(accounts[0]);
+            console.log("wallet: ", wallet);
+            connected = true;
+            // change text of to wallet address
+            document.getElementById('connect').innerHTML = wallet._address;
+            // display wallet address and chain
+            const chainId = (await provider.getNetwork()).chainId;
+            document.getElementById('walletinfo').innerHTML = `Wallet: ${accounts[0]} <br> ChainId: ${chainId}`;
+
+            const balance = await provider.getBalance(accounts[0]);
+            document.getElementById('ethBalance').innerHTML = ethers.utils.formatEther(balance);
+            // get transaction count
+            const transactionCount = await provider.getTransactionCount(accounts[0]);
+            document.getElementById('transactionCount').innerHTML = transactionCount;
+        });
+
+    </script>
+</body>
+
+</html>
