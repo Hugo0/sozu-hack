@@ -10,6 +10,10 @@ contract Registry {
 
     event ReceivedMessage(uint32 origin, bytes32 sender, bytes message);
 
+    constructor(address _inbox) {
+        inbox = IMailbox(_inbox);
+    }
+
     function handle(
         uint32 origin,
         bytes32 sender,
@@ -20,7 +24,7 @@ contract Registry {
         data[contractAddress][functionSignature] = dataValue;
         emit ReceivedMessage(origin, sender, message);
     }
-    
+
     function readData(
         address contractAddress, 
         bytes memory functionSignature
