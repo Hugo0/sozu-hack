@@ -14,7 +14,7 @@ contract DataEndpointTest is Test {
         // TODO: deploy to goerli chain
         dataEndpoint = new DataEndpoint();
         // TODO: deploy to optimism goerli chain
-        registry = new Registry();
+        registry = new Registry(address(dataEndpoint));
     }
 
     function testDataEndpoint_canRead() external {  
@@ -24,7 +24,7 @@ contract DataEndpointTest is Test {
         bytes memory expectedData = dataEndpoint.sendData(contractAddress, functionSignature, 420, bytes32(uint256(uint160(address(registry)))));
 
         // TODO: switch to optimism goerli chain
-        bytes memory data = registry.readData(contractAddress, functionSignature);
+        bytes memory data = registry.readData(contractAddress, 5, functionSignature);
         assertEq(data, expectedData);
     }
 }
