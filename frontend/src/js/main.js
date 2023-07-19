@@ -14,18 +14,33 @@ function toggleForm() {
 }
 
 
-async function testNFTCall(wallet) {
+async function getNFTBalance(wallet, NFTContractAddress){
 
     // check the balannce of an NFT for current wallet
     console.log("current wallet address: ", wallet._address);
     console.log('connected to chainId: ', (await provider.getNetwork()).chainId);
-    let NFT_contract_address = "0x932ca55b9ef0b3094e8fa82435b3b4c50d713043";
-    let NFT_contract_abi = [
+    // let NFTContractAddress = "0x932ca55b9ef0b3094e8fa82435b3b4c50d713043";
+    let NFTContractABI = [
         "function balanceOf(address owner) external view returns (uint256 balance)",
     ];
-    let NFT_contract = new ethers.Contract(NFT_contract_address, NFT_contract_abi, wallet);
-    let balance = await NFT_contract.balanceOf(wallet._address);
-    console.log("balance: ", balance);            
+    let NFTContract = new ethers.Contract(NFTContractAddress, NFTContractABI, wallet);
+    let balance = await NFTContract.balanceOf(wallet._address);
+    console.log("balance: ", balance); 
+    return balance;           
+}
+
+async function refreshSourceData(wallet) {
+    // refreshes the source data:
+    // 1. NFT BAYC
+    // 2. KYC ... 
+    // 3. any additional ones
+    // 4. update the UI
+
+    let NFTContractAddress = "0x932ca55b9ef0b3094e8fa82435b3b4c50d713043"; // BAYC on goerli testnet
+    let nftBalance = await getNFTBalance(wallet, NFTContractAddress);
+    let NFTBalanceElement = document.getElementById("testnetBAYCBalance");
+    NFTBalanceElement.innerHTML = nftBalance.toString();
+    console.log("nftBalance: ", nftBalance.toString());
 }
 
 function testGetEncodedFunctionData(wallet) {
@@ -84,25 +99,34 @@ async function testCallDataEndpoint(){
 }
 
 
-async function sendData(wallet, dataEndpointContractAddress, encodedFunctionData, destinationDomain, recipient, value) {
+async function sendData(wallet, dataEndpointContractAddress, dataSourceContractAddress, encodedFunctionData, destinationDomain, recipientAddress) {
     dataEndpointContractAddress = "0x9fa4cfab777274aedbd7a5c39b733c3e4534844f";
+    recipientAddress = "0xfe5CD4EB9748C62B6B3edd36FA6c033c95D2f685";
     let dataEndpointContractABI = [
         "function sendData(address contractAddress, bytes memory encodedFunctionData, uint32 destinationDomain, bytes32 recipient) public payable returns(bytes memory)"
     ];
     let dataEndpointContract = new ethers.Contract(dataEndpointContractAddress, dataEndpointContractABI, wallet);
-    let result = await dataEndpointContract.sendData(NFT_contract_address, encodedFunctionData, destinationDomain, recipient, {value: ethers.utils.parseEther(value)});
+    let recipientAddressBytes32 = ethers.utils.hexZeroPad(recipientAddress, 32);
+    let gasValue = ethers.utils.parseEther("0.01");
+    let result = await dataEndpointContract.sendData(dataSourceContractAddress, encodedFunctionData, destinationDomain, recipientAddressBytes32, {value: gasValue});
     console.log("result: ", result);
+
+    // add data to the global sendDataCalls array
+    sendDataCalls.push({
+        "dataEndpointContractAddress": dataEndpointContractAddress,
+        "dataSourceContractAddress": dataSourceContractAddress,
+        "encodedFunctionData": encodedFunctionData,
+        "destinationDomain": destinationDomain,
+        "recipientAddress": recipientAddress,
+        "gasValue": gasValue,
+        "result": result
+    });
+    
     return result;
 }
 
 async function readData(wallet, srcContractAddress, encodedFunctionData) {
     // calls readData function on destination contract
-    // function readData(
-    //     address contractAddress, 
-    //     bytes memory functionSignature
-    // ) public view returns(bytes memory) {
-    //     return data[contractAddress][functionSignature];
-    // }
     let registryContractAddress = "0xfe5CD4EB9748C62B6B3edd36FA6c033c95D2f685"; // harcoded for now, optimism testnet
     let registryContractAbi = [
         "function readData(address contractAddress, bytes memory functionSignature) public view returns(bytes memory)"
@@ -111,6 +135,31 @@ async function readData(wallet, srcContractAddress, encodedFunctionData) {
     let result = await registryContract.readData(srcContractAddress, encodedFunctionData);
     console.log("readData() result: ", result);
     return result;
+}
+
+async function readDataFromSendDataCall(wallet, sendDataCall) {
+    // calls readData function on destination contract
+    let registryContractAddress = "0xfe5CD4EB9748C62B6B3edd36FA6c033c95D2f685"; // harcoded for now, optimism testnet
+    let registryContractAbi = [
+        "function readData(address contractAddress, bytes memory functionSignature) public view returns(bytes memory)"
+    ];
+    let registryContract = new ethers.Contract(registryContractAddress, registryContractAbi, wallet);
+    let result = await registryContract.readData(sendDataCall.dataSourceContractAddress, sendDataCall.encodedFunctionData);
+    console.log("readData() result: ", result);
+    return result;
+}
+    
+
+async function fillReadDataResults(wallet) {
+    // fills in readDataResults array with results from readData() calls
+    readDataResults = [];
+    for (let i = 0; i < sendDataCalls.length; i++) {
+        let sendDataCall = sendDataCalls[i];
+        let readDataResult = await readDataFromSendDataCall(wallet, sendDataCall);
+        readDataResults.push(readDataResult);
+    }
+    console.log("readDataResults: ", readDataResults);
+    return readDataResults;
 }
 
 async function pollRegistryForStateChange(wallet) {

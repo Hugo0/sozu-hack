@@ -18,50 +18,47 @@
 
 <body class="bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
     <div class="container mx-auto px-4 py-5">
-
         <div class="flex justify-center pt-8">
-
-            <button id="connect" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <button id="connect" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-8 rounded">
                 CONNECT
-            </button>
-        </div>
-        <div class="flex justify-center pt-4 pb-8">
-
-            <button id="transport" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                TRANSPORT DATA
             </button>
         </div>
         <div class="grid grid-cols-2 gap-4">
             <div class="bg-white rounded overflow-hidden shadow-lg p-6">
-                <h2 class="font-bold text-xl mb-2"><span class="font-normal">Source Chain: </span>GOERLI</h2>
+                <div class="flex justify-between items-center">
+                    <h2 class="font-bold text-xl mb-2"><span class="font-normal">Source Chain: </span>GOERLI</h2>
+                    <button class="font-bold py-2 px-4 rounded refresh-button" id="refreshSourceButton">Refresh</button>
+                </div>
                 <p class="hidden"><span class="font-bold">Eth Balance: </span><span id="ethBalance">0</span></p>
-                <p class="hidden"><span class="font-bold">Transaction Count: </span><span id="transactionCount">0</span></p>
+                <p class="hidden"><span class="font-bold">Transaction Count: </span><span id="transactionCount">0</span>
+                </p>
                 <p id="walletinfo" class="hidden"></p>
                 <div class="bg-white rounded border-black border-2 p-4 mb-4 mt-8 flex justify-between items-center">
                     <div>
-                        <h3 class="font-bold text-xl mb-2"><a class="cursor" target="_blank" href="https://knowyourcat.id/">KnowYourCat 😺</a></h3>
-                        <p><span class="font-bold">Some data: </span><span id="someData">12345</span></p>
-                        <p><span class="font-bold">More data: </span><span id="moreData">67890</span></p>
+                        <h3 class="font-bold text-xl mb-2"><a class="cursor" target="_blank"
+                                href="https://knowyourcat.id/">KnowYourCat 😺</a></h3>
+                        <p><span class="font-bold">Hold SBT: </span><span id="someData"> ... </span></p>
                     </div>
-                    
+
                     <!-- button that calls sendData() -->
-                    <button id="sendButton" class="send-button font-bold py-2 px-4 rounded" onclick="console.log('hi')">
-                        Send Data
+                    <button id="testnetKYCSendData" class="send-button font-bold py-2 px-4 rounded">
+                        Transport
                     </button>
                 </div>
                 <div class="bg-white rounded border-black border-2 p-4 mb-4 mt-8 flex justify-between items-center">
                     <div>
-                        <h3 class="font-bold text-xl mb-2"><a class="cursor" target="_blank" href="https://goerli.etherscan.io/address/0x932ca55b9ef0b3094e8fa82435b3b4c50d713043">Testnet BAYC 🦍</a></h3>
-                        <p><span class="font-bold">Some data: </span><span id="someData">12345</span></p>
-                        <p><span class="font-bold">More data: </span><span id="moreData">67890</span></p>
+                        <h3 class="font-bold text-xl mb-2"><a class="cursor" target="_blank"
+                                href="https://goerli.etherscan.io/address/0x932ca55b9ef0b3094e8fa82435b3b4c50d713043">Testnet
+                                BAYC 🦍</a></h3>
+                        <p><span class="font-bold">Your Balance: </span><span id="testnetBAYCBalance">...</span></p>
                     </div>
-                    
+
                     <!-- button that calls sendData() -->
-                    <button id="sendButton" class="send-button font-bold py-2 px-4 rounded" onclick="console.log('hi')">
-                        Send Data
+                    <button id="testnetBAYCSendData" class="send-button font-bold py-2 px-4 rounded">
+                        Transport
                     </button>
                 </div>
-                                
+
                 <div class="bg-white rounded overflow-hidden border-black border-2 p-4 mb-4 mt-8">
                     <div class="flex items-center justify-between cursor-pointer" onclick="toggleForm()">
                         <h2 class="font-bold text-md mb-2">ADD CUSTOM DATA</h2>
@@ -72,14 +69,14 @@
                         <p class="text-gray-700 text-base py-3">
                             Add your custom contract data to be transported to the destination chain.
                         </p>
-                        <form>
+                        <form onsubmit="return false">
                             <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2" for="contractAddress">Contract
                                     Address</label>
                                 <input
                                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="contractAddress" type="text"
-                                    placeholder="0x932ca55b9ef0b3094e8fa82435b3b4c50d713043">
+                                    placeholder="0x932ca55b9ef0b3094e8fa82435b3b4c50d713043" required value="0x326c977e6efc84e512bb9c30f76e30c160ed06fb">
                             </div>
                             <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2"
@@ -87,17 +84,17 @@
                                 <input
                                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="functionSelector" type="text"
-                                    placeholder="function balanceOf(address owner) external view returns (uint256 balance)">
+                                    placeholder="function balanceOf(address owner) external view returns (uint256 balance)" required value="function balanceOf(address owner) external view returns (uint256 balance)">
                             </div>
                             <div class="mb-4">
-                                <label class="block text-gray-700 text-sm font-bold mb-2" for="callData">Call
-                                    Data</label>
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="callData">Input
+                                    </label>
                                 <input
                                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="callData" type="text" placeholder="Enter call data">
+                                    id="callData" type="text" placeholder="0x6B3751c5b04Aa818EA90115AA06a4D9A36A16f02" required value="0x6B3751c5b04Aa818EA90115AA06a4D9A36A16f02">
                             </div>
-                            <button id="refreshButton" class="refresh-button font-bold py-2 px-4 rounded">
-                                Add
+                            <button id="transportCustomData" class="send-button font-bold py-2 px-4 rounded">
+                                Transport
                             </button>
                         </form>
                     </div>
@@ -114,26 +111,39 @@
                     Your data will be transported here.
                 </p>
 
-                    <button id="refreshButton" class="refresh-button font-bold py-2 px-4 rounded">
-                        Refresh
-                    </button>
+                <button id="changeDstChain" class="refresh-button font-bold py-2 px-4 rounded">
+                    Switch Chain
+                </button>
+                <button id="readDstData" class="refresh-button font-bold py-2 px-4 rounded">
+                    Refresh
+                </button>
+                <!-- holder div for multiple results -->
+                <div id="transportedData" class="flex flex-col gap-4 mt-4">
+                </div>
             </div>
 
         </div>
     </div>
-    <!-- <div class="flex justify-center py-8">
+    <div class="flex justify-center py-8">
             <h1 class="font-bold text-5xl text-white">SOZU HAUS</h1>
             <br>
-        </div> -->
+        </div>
     <div class="flex justify-center py-8">
 
         <div class="relative w-48 h-48">
             <img class="rounded-full border border-gray-100 shadow-sm"
                 src="https://pbs.twimg.com/profile_images/1584982357421031426/J_OpXjsx_400x400.jpg" alt="user image" />
         </div>
+        
     </div>
 
     <div class="fixed bottom-4 right-4 flex gap-4">
+        <!-- <a href="https://www.mantle.xyz/" target="_blank"
+            class="bg-blue-500 text-white w-10 h-10 flex justify-center items-center rounded-full"
+            aria-label="Twitter link">
+            <img class="rounded-full shadow-sm"
+                src="https://pbs.twimg.com/profile_images/1597775748580134914/bLhE1aY1_400x400.jpg" alt="user image" />
+        </a> -->
         <a href="https://github.com/hugo0/sozu-hack" target="_blank"
             class="bg-gray-800 text-white w-10 h-10 flex justify-center items-center rounded-full"
             aria-label="Github link">
@@ -155,56 +165,171 @@
 
     </div>
     <script>
+        let isConnected = false;
+        let wallet = null;
+
+        // data object to keep track of sendData() calls
+        //{
+        //    "dataEndpointContractAddress": "0x9fa4cfab777274aedbd7a5c39b733c3e4534844f",
+        //    "dataSourceContractAddress": "0x932ca55b9ef0b3094e8fa82435b3b4c50d713043",
+        //    "encodedFunctionData": "0x70a082310000000000000000000000006b3751c5b04aa818ea90115aa06a4d9a36a16f02",
+        //    "destinationDomain": 420,
+        //    "recipientAddress": "0xfe5CD4EB9748C62B6B3edd36FA6c033c95D2f685",
+        //    "gasValue": {
+        ////"type": "BigNumber",
+        ////"hex": "0x2386f26fc10000"
+        //    },
+        //    "result": {}
+        //}
+        let sendDataCalls = [
+            
+        ];
+        // data object to keep track of all the results
+        let readDataResults = [];
+
+        document.getElementById('transportCustomData').addEventListener('click', async () => {
+            // Get input values
+            var dataSourceContractAddress = document.getElementById('contractAddress').value;
+            var function_signature = document.getElementById('functionSelector').value;
+            var input = document.getElementById('callData').value;
+
+            // get encoded function data
+            // function getEncodedFunctionData(function_signature, input) {
+            // let function_signature = "function balanceOf(address owner) external view returns (uint256 balance)"
+            let encodedFunctionData = await getEncodedFunctionData(function_signature, input);
+
+            let dataEndpointContractAddress = "0x9fa4cfab777274aedbd7a5c39b733c3e4534844f";
+            let destinationDomain = 420;
+            let recipient = '0xfe5CD4EB9748C62B6B3edd36FA6c033c95D2f685';
+
+            let result = await sendData(wallet, dataEndpointContractAddress, dataSourceContractAddress, encodedFunctionData, destinationDomain, recipient);
+            console.log("result: ", result);
+        });
+
+        document.getElementById('refreshSourceButton').addEventListener('click', async () => {
+            if (!isConnected) {
+                alert('Please connect your wallet first!');
+                return;
+            }
+            await refreshSourceData(wallet);
+        });
+
+        document.getElementById('readDstData').addEventListener('click', async () => {
+            // fills readDataResults
+            let res = await fillReadDataResults(wallet);
+            console.log(res);
+            // add a styled card div for each result to transportedData holder div
+            let transportedData = document.getElementById('transportedData');
+            transportedData.innerHTML = "";
+            for (let i = 0; i < readDataResults.length; i++) {
+                let result = readDataResults[i];
+                let sendDataCall = sendDataCalls[i];
+                let card = `<div class="bg-white rounded overflow-hidden border-black border-2 p-4 mb-4 mt-8 flex justify-between items-center">
+                <div>
+                    <p class="text-xs break-all"><span>Src Contract: </span><span class="font-bold">${sendDataCall.dataSourceContractAddress}</span></p>
+                    <p class="text-xs break-all"><span>Src Encoded Data: </span><span class="font-bold">${sendDataCall.encodedFunctionData}</span></p>
+                    <br>
+                    <p class="text-xs break-all"><span>Dst data: </span><span class="font-bold">${result}</span></p>
+                </div>
+            </div>`;
+                transportedData.innerHTML += card;
+            }
+
+        });
+
+        document.getElementById('changeDstChain').addEventListener('click', async () => {
+            // change chain to 420 with ethers
+            window.ethereum.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: '0x1a4' }],
+            })
+
+        });
+
+
+
+        document.getElementById('testnetBAYCSendData').addEventListener('click', async () => {
+            // send bayc token balance data over data portal to the dst chain registry
+            // async function sendData(wallet, dataEndpointContractAddress, encodedFunctionData, destinationDomain, recipient) {
+
+            // get encoded function data
+            // function getEncodedFunctionData(function_signature, input) {
+            let function_signature = "function balanceOf(address owner) external view returns (uint256 balance)"
+            let input = wallet._address;
+            let encodedFunctionData = await getEncodedFunctionData(function_signature, input);
+
+            let dataEndpointContractAddress = "0x9fa4cfab777274aedbd7a5c39b733c3e4534844f";
+            let destinationDomain = 420
+            let recipient = '0xfe5CD4EB9748C62B6B3edd36FA6c033c95D2f685'
+            let dataSourceContractAddress = "0x932ca55b9ef0b3094e8fa82435b3b4c50d713043";
+
+            let result = await sendData(wallet, dataEndpointContractAddress, dataSourceContractAddress, encodedFunctionData, destinationDomain, recipient);
+            console.log("result: ", result);
+        });
+
+
         document.getElementById('connect').addEventListener('click', async () => {
             if (!window.ethereum) {
                 alert('MetaMask is not installed!');
                 return;
             }
+            window.onbeforeunload = function () {return false;}
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            provider = new ethers.providers.Web3Provider(window.ethereum); // if ethers v5
+            provider = new ethers.providers.Web3Provider(window.ethereum, "any"); // if ethers v5
+            // prompt switch to goerli
+            await window.ethereum.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: '0x5' }],
+            });
             //provider = new ethers.BrowserProvider(window.ethereum); // 
             wallet = await provider.getSigner(accounts[0]);
+
             console.log("wallet: ", wallet);
-            connected = true;
+            isConnected = true;
             // change text of to wallet address
             document.getElementById('connect').innerHTML = wallet._address;
-            // display wallet address and chain
-            const chainId = (await provider.getNetwork()).chainId;
-            document.getElementById('walletinfo').innerHTML = `Wallet: ${accounts[0]} <br> ChainId: ${chainId}`;
 
-            const balance = await provider.getBalance(accounts[0]);
-            document.getElementById('ethBalance').innerHTML = ethers.utils.formatEther(balance);
-            // get transaction count
-            const transactionCount = await provider.getTransactionCount(accounts[0]);
-            document.getElementById('transactionCount').innerHTML = transactionCount;
+            // refresh source data
+            await refreshSourceData(wallet);
+            // // display wallet address and chain
+            // const chainId = (await provider.getNetwork()).chainId;
+            // document.getElementById('walletinfo').innerHTML = `Wallet: ${accounts[0]} <br> ChainId: ${chainId}`;
+
+            // const balance = await provider.getBalance(accounts[0]);
+            // document.getElementById('ethBalance').innerHTML = ethers.utils.formatEther(balance);
+            // // get transaction count
+            // const transactionCount = await provider.getTransactionCount(accounts[0]);
+            // document.getElementById('transactionCount').innerHTML = transactionCount;
+
+
             //getEncodedFunctionData(wallet);
             //await testNFTCall(wallet);
             //await testCallDataEndpoint(wallet);
         });
 
-        document.getElementById('transport').addEventListener('click', () => {
+        //        document.getElementById('transport').addEventListener('click', () => {
 
-            // Show the loader
-            document.querySelector('.loader').style.display = 'flex';
+        //            // Show the loader
+        //            document.querySelector('.loader').style.display = 'flex';
 
-            // after 3 seconds hide loader and show transported data
-            setTimeout(() => {
-                document.querySelector('.loader').style.display = 'none';
+        //            // after 3 seconds hide loader and show transported data
+        //            setTimeout(() => {
+        //                //document.querySelector('.loader').style.display = 'none';
 
-                // fill out balances
-                const ethBalance = document.getElementById('ethBalance').textContent;
-                const transactionCount = document.getElementById('transactionCount').textContent;
+        //                //// fill out balances
+        //                //const ethBalance = document.getElementById('ethBalance').textContent;
+        //                //const transactionCount = document.getElementById('transactionCount').textContent;
 
-                document.getElementById('ethBalanceTransported').textContent = ethBalance;
-                document.getElementById('transactionCountTransported').textContent = transactionCount;
-                document.getElementById('transportedDataDescriptor').textContent = 'Your data has been transported!';
-            }, 1000);
-        });
+        //                //document.getElementById('ethBalanceTransported').textContent = ethBalance;
+        //                //document.getElementById('transactionCountTransported').textContent = transactionCount;
+        //                //document.getElementById('transportedDataDescriptor').textContent = 'Your data has been transported!';
+        //            }, 1000);
+        //});
 
-        document.getElementById('refreshButton').addEventListener('click', () => {
-            // Code to refresh your data goes here.
-            console.log('refreshing data');
-        });
+        //document.getElementById('refreshButton').addEventListener('click', () => {
+        //    // Code to refresh your data goes here.
+        //    console.log('refreshing data');
+        //});
 
     </script>
 </body>
