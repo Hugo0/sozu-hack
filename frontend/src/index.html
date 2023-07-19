@@ -1,7 +1,9 @@
 <head>
     <title>Sozu Haus Data Transport</title>
-    <link rel="icon" type="image/x-icon"
-        href="https://pbs.twimg.com/profile_images/1584982357421031426/J_OpXjsx_400x400.jpg">
+    <!-- <link rel="icon" type="image/x-icon"
+        href="https://pbs.twimg.com/profile_images/1584982357421031426/J_OpXjsx_400x400.jpg"> -->
+        <link rel="icon" type="image/x-icon"
+            href="media/transporter_logo.png">
 
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.js" crossorigin="anonymous"
@@ -36,8 +38,20 @@
                 <div class="bg-white rounded border-black border-2 p-4 mb-4 mt-8 flex justify-between items-center">
                     <div>
                         <h3 class="font-bold text-xl mb-2"><a class="cursor" target="_blank"
+                                href="https://www.zk.me/">ZKME </a></h3>
+                        <p><span class="font-bold">Hold SBT: </span><span id="testnetZKMEBalance"> ... </span></p>
+                    </div>
+
+                    <!-- button that calls sendData() -->
+                    <button id="testnetZKMESendData" class="send-button font-bold py-2 px-4 rounded">
+                        Transport
+                    </button>
+                </div>
+                <div class="bg-white rounded border-black border-2 p-4 mb-4 mt-8 flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold text-xl mb-2"><a class="cursor" target="_blank"
                                 href="https://knowyourcat.id/">KnowYourCat 😺</a></h3>
-                        <p><span class="font-bold">Hold SBT: </span><span id="someData"> ... </span></p>
+                        <p><span class="font-bold">Hold SBT: </span><span id="testnetKYCBalance"> ... </span></p>
                     </div>
 
                     <!-- button that calls sendData() -->
@@ -124,15 +138,17 @@
 
         </div>
     </div>
-    <div class="flex justify-center py-8">
+    <!-- <div class="flex justify-center py-8">
             <h1 class="font-bold text-5xl text-white">SOZU HAUS</h1>
             <br>
-        </div>
+        </div> -->
     <div class="flex justify-center py-8">
 
         <div class="relative w-48 h-48">
+            <!-- <img class="rounded-full border border-gray-100 shadow-sm"
+                src="media/transporter_logo.png" alt="user image" /> -->
             <img class="rounded-full border border-gray-100 shadow-sm"
-                src="https://pbs.twimg.com/profile_images/1584982357421031426/J_OpXjsx_400x400.jpg" alt="user image" />
+            src="https://pbs.twimg.com/profile_images/1584982357421031426/J_OpXjsx_400x400.jpg" alt="user image" />
         </div>
         
     </div>
@@ -246,7 +262,25 @@
 
         });
 
+        document.getElementById('testnetKYCSendData').addEventListener('click', async () => {
+            // send bayc token balance data over data portal to the dst chain registry
+            // async function sendData(wallet, dataEndpointContractAddress, encodedFunctionData, destinationDomain, recipient) {
 
+            // get encoded function data
+            // function getEncodedFunctionData(function_signature, input) {
+            let function_signature = "function balanceOf(address owner) external view returns (uint256 balance)"
+            let input = wallet._address;
+            let encodedFunctionData = await getEncodedFunctionData(function_signature, input);
+
+            let dataEndpointContractAddress = "0x9fa4cfab777274aedbd7a5c39b733c3e4534844f";
+            let destinationDomain = 420
+            let recipient = '0xfe5CD4EB9748C62B6B3edd36FA6c033c95D2f685'
+            let dataSourceContractAddress = "0x876ebeb61f9ae6871c9e63e093173d3de3ddfc62";
+
+            let result = await sendData(wallet, dataEndpointContractAddress, dataSourceContractAddress, encodedFunctionData, destinationDomain, recipient);
+            console.log("result: ", result);
+        });
+        
 
         document.getElementById('testnetBAYCSendData').addEventListener('click', async () => {
             // send bayc token balance data over data portal to the dst chain registry

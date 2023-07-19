@@ -41,6 +41,22 @@ async function refreshSourceData(wallet) {
     let NFTBalanceElement = document.getElementById("testnetBAYCBalance");
     NFTBalanceElement.innerHTML = nftBalance.toString();
     console.log("nftBalance: ", nftBalance.toString());
+    
+
+    // balanceOf doesn't work for kyc
+    // let NFTContractAddress2 = "0x876ebeb61f9ae6871c9e63e093173d3de3ddfc62"; // KYC on goerli testnet
+    // let nftBalance2 = await getNFTBalance(wallet, NFTContractAddress2);
+    let NFTBalanceElement2 = document.getElementById("testnetKYCBalance");
+    // NFTBalanceElement2.innerHTML = nftBalance2.toString();
+    NFTBalanceElement2.innerHTML = 0;
+    // console.log("nftBalance2: ", nftBalance2.toString());
+
+    // 0xf70eb11f2b03553d53fbe156130466fe6a3356b2 zkme
+    let NFTContractAddress3 = "0xf70eb11f2b03553d53fbe156130466fe6a3356b2"; // KYC on goerli testnet
+    let nftBalance3 = await getNFTBalance(wallet, NFTContractAddress3);
+    let NFTBalanceElement3 = document.getElementById("testnetZKMEBalance");
+    NFTBalanceElement3.innerHTML = nftBalance3.toString();
+    console.log("nftBalance3: ", nftBalance3.toString());
 }
 
 function testGetEncodedFunctionData(wallet) {
