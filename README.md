@@ -6,25 +6,5 @@ Deployed Addresses:
 - [Optimism Goerli](https://goerli-optimism.etherscan.io/address/0xfe5CD4EB9748C62B6B3edd36FA6c033c95D2f685)
 - [Mantle Testnet](https://explorer.testnet.mantle.xyz/address/0xEBfaA3E45ff33e887744F46bD37FFF884136814A)
 
-
-Deployed at: https://bafybeifpfxcg35wcmmjoye6esorfykbqks4n6qvzvpjefelcuewggttqrq.ipfs.nftstorage.link/
-
-
-## TODO:
-- [x] src chain registry contract - Kai
-- [x] dst chain receiver registry contract - Kai / Hugo
-- [ ] figure out crosschain calls - Hugo
-- [ ] (opt) bitmap for gas efficiency - maybe Hugo - WONTDO (not necessary)
-- [ ] (opt) permissionless property adding - maybe Kai - 
-- [ ] demo js script - Hugo - WONTDO (we do website instead)
-- [ ] webpage - Hugo
-    - [x] mvp
-    - [x] send over data
-    - [ ] read dst data
-    - [ ] add custom calls
-    - [ ] read custom calls
-    - [ ] mantle hardcoding
-    - [ ] default calls: zkMe
-    - [ ] default calls: kyc
-- [ ] webpage on IPFS - Hugo
-- [ ] logistics: video, presentation, devfolio submission - together
+## Instructions
+Open up a Live Server and navigate to `index.html`.
